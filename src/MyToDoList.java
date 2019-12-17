@@ -22,7 +22,7 @@ public class MyToDoList extends JPanel{
 	private JScrollPane _scrollTable;
 	private DefaultTableModel _tableModel;
 	private int _currentRow;
-	private int _rowDatabaseID;
+	private int _currentDatabaseID;
 	private ListSelectionModel _select;
 	
 	public MyToDoList(String[] columnNames, Object[][] listEntries) {
@@ -33,7 +33,7 @@ public class MyToDoList extends JPanel{
 		_currentRow = -1;
 		_columnNames = columnNames;
 		if(listEntries == null) {
-			// Default entries when using the app without a database/offline mode
+			// Default entries when using the application without a database/offline mode
 			_listEntries = new Object[][]{
 				{"Make dentist appointment", 0},
 				{"Buy eggs and milk", 1},
@@ -41,7 +41,7 @@ public class MyToDoList extends JPanel{
 				{"Oil change on Friday", 3}
 			};;
 		} else {
-			// Use the entries provided
+			// Use the entries provided, could be empty
 			_listEntries = listEntries;
 		}
 
@@ -59,13 +59,15 @@ public class MyToDoList extends JPanel{
 		
 		// Get column model in order to remove/hide the database id column from the user
 		TableColumnModel columnModel = _table.getColumnModel();
+		// The column data still exists when it is removed
 		columnModel.removeColumn(columnModel.getColumn(ID_COLUMN_INDEX));
 		
-		// Add a listener to determine which entry is currently selected
+		
 		_table.setCellSelectionEnabled(true);
 		_select = _table.getSelectionModel();
-		// Only allow one entry to be selected
+		// Only allow one entry to be selected at a time
 		_select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		// Add a listener to determine which entry is currently selected
 		_select.addListSelectionListener( new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				// valueChanged fires twice on click, only run once
@@ -74,8 +76,9 @@ public class MyToDoList extends JPanel{
 					int[] row = _table.getSelectedRows();
 					// Prevents out of bounds error if first row is deleted
 					if(row.length != 0) {
+						// Update globals to reflect the current selected row
 						_currentRow = row[0];
-						_rowDatabaseID = (int) _table.getModel().getValueAt(row[0], ID_COLUMN_INDEX);
+						_currentDatabaseID = (int) _table.getModel().getValueAt(row[0], ID_COLUMN_INDEX);
 					}
 				}
 			}
@@ -87,8 +90,8 @@ public class MyToDoList extends JPanel{
 	}
 	
 	// Add an entry
-	public void addEntry(String entryText) {
-		_tableModel.addRow(new Object[]{entryText, 0});
+	public void addEntry(String entryText, int hiddenID) {
+		_tableModel.addRow(new Object[]{entryText, hiddenID});
 	}
 	
 	// Remove an entry
@@ -97,7 +100,7 @@ public class MyToDoList extends JPanel{
 		if(_tableModel.getRowCount() > 0 && _currentRow != -1) {
 			_tableModel.removeRow(_currentRow);
 		}
-		// Clear highlighted row on GUI
+		// Clear the selected row 
 		_select.clearSelection();
 		_currentRow = -1;
 	}
@@ -110,11 +113,6 @@ public class MyToDoList extends JPanel{
 		}
 	}
 	
-	// Returns the JTable
-	public JTable getTable() {
-		return _table;
-	}
-	
 	// Returns the index of the currently selected row
 	public int getCurrentRow() {
 		return _currentRow;
@@ -122,18 +120,17 @@ public class MyToDoList extends JPanel{
 	
 	// Returns the text of the currently selected row
 	public String getCurrentEntry() {
-		int currentRow = getCurrentRow();
 		// Make sure there is a row selected
-		if(currentRow != -1) {	
-			return (String) _table.getModel().getValueAt(currentRow, TEXT_COLUMN_INDEX);
+		if(_currentRow != -1) {	
+			return (String) _table.getModel().getValueAt(_currentRow, TEXT_COLUMN_INDEX);
 		} else {
 			return null;
 		}
 	}
 	
-	// Returns the database ID of the currently selected row
-	public int getDatabaseID() {
-		return _rowDatabaseID;
+	// Returns the database ID of the current selected row
+	public int getCurrentDatabaseID() {
+		return _currentDatabaseID;
 	}
 
 }

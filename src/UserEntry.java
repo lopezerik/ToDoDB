@@ -73,7 +73,7 @@ public class UserEntry extends JDialog {
 							+ contentLength, "Error", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					_userInput = userInput;
-					// Hide the dialog in order for the calling class to retrieve the user input
+					// Hide the dialog box in order for the calling class to retrieve the user input
 					setVisible(false);
 				}
 		
