@@ -50,7 +50,7 @@ In the "todo" schema, create a new table using these SQL instructions:
    You can easily [create a SQL server](https://youtu.be/u96rVINbAUI) with a dummy password and username on your local machine.  
 
 Now you can run steps 1 and 2 from the [Quick Start](#start) guide. However, we must include the  
-path to the installation of the MySQL Connector for Java.  
+path to the installation of the MySQL Connector for Java when running the application.  
 ```
 cd src
 javac Main.java
