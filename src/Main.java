@@ -25,7 +25,7 @@ public class Main {
 
 		CredentialsParser parser = new CredentialsParser();
 		Map<String, String> map = parser.parseDatabase("credentials.ini");
-			
+		
 		DatabaseManager db = new DatabaseManager(map);
 
 		// Check if we can connect to the database, else run in offline mode

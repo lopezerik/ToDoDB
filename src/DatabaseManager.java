@@ -15,17 +15,22 @@ public class DatabaseManager {
 	
 	// Constructor 
 	public DatabaseManager(Map<String, String> credentials) {
-		try {
-			String url = credentials.get("url");
-			String username = credentials.get("user");
-			String password = credentials.get("password");
-			// Load the MySQL database Driver
-			Class.forName(DATABASE_DRIVER);
-			// Establish connection
-			_connection = DriverManager.getConnection(url, username, password);
-		} catch(Exception e) {
-			System.out.println("Error establishing connection to Database");
-			System.out.println(e);
+		if (credentials != null) {
+			
+			try {
+				String url = credentials.get("url");
+				String username = credentials.get("user");
+				String password = credentials.get("password");
+				// Load the MySQL database Driver
+				Class.forName(DATABASE_DRIVER);
+				// Establish connection
+				_connection = DriverManager.getConnection(url, username, password);
+			} catch(Exception e) {
+				System.out.println("Error establishing connection to Database.");
+				System.out.println(e);
+			}
+		} else {
+			System.out.println("Credentials not found. Cannot conenct to database.");
 		}
 	}
 	

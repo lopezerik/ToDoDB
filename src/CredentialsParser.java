@@ -46,6 +46,7 @@ public class CredentialsParser {
 			return map;
 			
 		} catch (Exception e) {
+			System.out.println("Error in credentials parser");
 			System.out.println(e);
 			return null;
 		}
